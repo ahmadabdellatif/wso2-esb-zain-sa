@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="SignupResponseSQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property expression="$axis2:HTTP_SC" name="httpStatusCode" scope="default" type="STRING"/>
+    <property expression="json-eval($)" name="responseBody" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('httpStatusCode')" name="HTTPSTATUSCODE"/>
+        <property expression="get-property('responseBody')" name="BODY"/>
+    </log>
+    <switch source="get-property('httpStatusCode')">
+        <case regex="201">
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+				"is_successful": true,&#xd;
+				"data": "$1",&#xd;
+				"message": "Created",&#xd;
+				"errors": [],&#xd;
+				"response_code": $2}&#xd;
+				</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('uid')"/>
+                    <arg evaluator="xml" expression="get-property('httpStatusCode')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <case regex="400">
+            <property expression="json-eval($.message)" name="message" scope="default" type="STRING"/>
+            <payloadFactory media-type="json">
+                <format>{
+				"is_successful": false,
+				"message": "$2",
+				"errors": $1,
+				"response_code": $3,
+				"data": []}
+				</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('responseBody')"/>
+                    <arg evaluator="xml" expression="get-property('message')"/>
+                    <arg evaluator="xml" expression="get-property('httpStatusCode')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <case regex="409">
+            <property expression="json-eval($.message)" name="message" scope="default" type="STRING"/>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+				"is_successful": false,&#xd;
+				"message": "$2",&#xd;
+				"errors": $1,&#xd;
+				"response_code": $3,&#xd;
+				"data": []&#xd;
+}&#xd;
+				</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('responseBody')"/>
+                    <arg evaluator="xml" expression="get-property('message')"/>
+                    <arg evaluator="xml" expression="get-property('httpStatusCode')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <case regex="404">
+            <property expression="json-eval($.message)" name="message" scope="default" type="STRING"/>
+            <payloadFactory media-type="json">
+                <format>{
+				"is_successful": false,
+				"message": "$2",
+				"errors": $1,
+				"response_code": $3,
+				"data": []}
+				</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('responseBody')"/>
+                    <arg evaluator="xml" expression="get-property('message')"/>
+                    <arg evaluator="xml" expression="get-property('httpStatusCode')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <case regex="500"/>
+        <default>
+            <payloadFactory media-type="text">
+                <format>"Error undefined"</format>
+                <args/>
+            </payloadFactory>
+            <log>
+                <property name="ERROR" value="Error undefined"/>
+            </log>
+        </default>
+    </switch>
+</sequence>

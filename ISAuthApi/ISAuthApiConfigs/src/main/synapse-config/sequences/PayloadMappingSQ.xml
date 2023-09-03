@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="PayloadMappingSQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property expression="concat(get-property('username'), get-property('password'))" name="usrpass" scope="default" type="STRING"/>
+    <property expression="base64Encode(get-property('usrpass'))" name="encodedusrpass" scope="default" type="STRING"/>
+    <header name="Content-Type" scope="transport" value="application/json"/>
+    <payloadFactory media-type="json">
+        <format>{&#xd;
+  "username": "$1",&#xd;
+  "password": "$2"&#xd;
+}</format>
+        <args>
+            <arg evaluator="xml" expression="get-property('username')"/>
+            <arg evaluator="xml" expression="get-property('password')"/>
+        </args>
+    </payloadFactory>
+    <log level="full"/>
+</sequence>

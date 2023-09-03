@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="signupRequestMappingSQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property expression="json-eval($.userName)" name="userName" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('userName')" name="USERNAME"/>
+    </log>
+    <property expression="json-eval($.email)" name="email" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('email')" name="Email"/>
+    </log>
+    <property expression="json-eval($.mobile)" name="mobile" scope="default" type="STRING"/>
+    <property name="mailormobile" scope="default" type="STRING" value="true"/>
+    <property expression="json-eval($.password)" name="password" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('password')" name="PASSWORD"/>
+    </log>
+    <property expression="json-eval($.givenName)" name="firstName" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('firstName')" name="GIVENNAME"/>
+    </log>
+    <property expression="json-eval($.lastName)" name="lastName" scope="default" type="STRING"/>
+    <log>
+        <property expression="get-property('lastName')" name="LASTNAME"/>
+    </log>
+    <switch source="get-property('userName')">
+        <case regex="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$">
+            <log>
+                <property expression="get-property('userName')" name="E-Mail"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "user": {&#xd;
+        "username": "$1",&#xd;
+        "realm": "PRIMARY",&#xd;
+        "password": "$3",&#xd;
+        "claims": [&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/givenname",&#xd;
+                "value": "$4"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/lastname",&#xd;
+                "value": "$5"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/emailaddress",&#xd;
+                "value": "$2"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/identity/preferredChannel",&#xd;
+                "value": "EMAIL"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/mobile",&#xd;
+                "value": "$6"&#xd;
+            }&#xd;
+        ]&#xd;
+    },&#xd;
+    "properties": []&#xd;
+}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('userName')"/>
+                    <arg evaluator="xml" expression="get-property('userName')"/>
+                    <arg evaluator="xml" expression="get-property('password')"/>
+                    <arg evaluator="xml" expression="get-property('firstName')"/>
+                    <arg evaluator="xml" expression="get-property('lastName')"/>
+                    <arg evaluator="xml" expression="get-property('mobile')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <case regex="^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{2,3})[-. )]*(\d{3})[-. ]*(\d{4,6})(?: *x(\d+))?\s*$">
+            <log>
+                <property expression="get-property('userName')" name="Mobile"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "user": {&#xd;
+        "username": "$1",&#xd;
+        "realm": "PRIMARY",&#xd;
+        "password": "$3",&#xd;
+        "claims": [&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/givenname",&#xd;
+                "value": "$4"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/lastname",&#xd;
+                "value": "$5"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/mobile",&#xd;
+                "value": "$2"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/identity/preferredChannel",&#xd;
+                "value": "SMS"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/emailaddress",&#xd;
+                "value": "$6"&#xd;
+            }&#xd;
+        ]&#xd;
+    },&#xd;
+    "properties": []&#xd;
+}</format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('userName')"/>
+                    <arg evaluator="xml" expression="get-property('userName')"/>
+                    <arg evaluator="xml" expression="get-property('password')"/>
+                    <arg evaluator="xml" expression="get-property('firstName')"/>
+                    <arg evaluator="xml" expression="get-property('lastName')"/>
+                    <arg evaluator="xml" expression="get-property('email')"/>
+                </args>
+            </payloadFactory>
+        </case>
+        <default>
+            <payloadFactory media-type="json">
+                <format>{&#xd;
+    "is_successful": false,&#xd;
+    "message": "Invalid input data.",&#xd;
+    "errors": "Username is neither mail nor mobile.",&#xd;
+    "response_code": null&#xd;
+}</format>
+                <args/>
+            </payloadFactory>
+            <respond/>
+        </default>
+    </switch>
+</sequence>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="RequestMappingSQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <property expression="json-eval($.username)" name="username" scope="default" type="STRING"/>
+    <property expression="json-eval($.password)" name="password" scope="default" type="STRING"/>
+    <log level="full"/>
+</sequence>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/test" name="Test" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST">
+        <inSequence>
+            <property expression="get-property('registry', 'conf:/endpoints/AuthEPEnv')" name="username" scope="default" type="STRING"/>
+            <property expression="json-eval($.password)" name="password" scope="default" type="STRING"/>
+            <log>
+                <property expression="get-property('username')" name="USERNAME"/>
+            </log>
+            <property expression="concat(get-property('username'), get-property('password'))" name="concated" scope="default" type="STRING"/>
+            <log>
+                <property expression="get-property('concated')" name="CONCATED"/>
+            </log>
+            <property expression="base64Encode(get-property('concated'))" name="headerEncoded" scope="default" type="STRING"/>
+            <log>
+                <property expression="get-property('headerEncoded')" name="HEADERSENCODED"/>
+            </log>
+            <respond/>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>

@@ -1,0 +1,11 @@
+---
+key: "is-1.0.0"
+name : "is"
+displayName : "is"
+description: "Sample API"
+version: "1.0.0"
+serviceUrl: "https://{MI_HOST}:{MI_PORT}/zain"
+definitionType: "OAS3"
+securityType: "BASIC"
+mutualSSLEnabled: false
+apiId : "null"

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/zain" name="RegisterationAPI" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/signup">
+        <inSequence>
+            <sequence key="signupRequestMappingSQ"/>
+            <property description="EPProperty" expression="get-property('registry', 'conf:/resource/endpoints/ISHostname')" name="uri.var.ISHostname" scope="default" type="STRING"/>
+            <log description="EP Log">
+                <property expression="get-property('uri.var.ISHostname')" name="EPLogging"/>
+            </log>
+            <header scope="default"/>
+            <send description="Request Identity Server">
+                <endpoint key="RegAPI_EP"/>
+            </send>
+        </inSequence>
+        <outSequence>
+            <sequence key="SignupResponseSQ"/>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+</api>

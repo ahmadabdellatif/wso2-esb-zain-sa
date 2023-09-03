@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/isauth" name="Auth" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="POST" uri-template="/gettoken">
+        <inSequence>
+            <sequence key="RequestMappingSQ"/>
+            <sequence key="PayloadMappingSQ"/>
+            <property description="EPProperty" expression="get-property('registry', 'conf:/resource/endpoints/ISHostname')" name="uri.var.ISHostname" scope="default" type="STRING"/>
+            <log>
+                <property expression="get-property('uri.var.ISHostname')" name="ISHostname"/>
+            </log>
+            <header name="Authorization" scope="default" value="Basic YWRtaW46YWRtaW4="/>
+            <send>
+                <endpoint key="AuthApi_EP"/>
+            </send>
+        </inSequence>
+        <outSequence>
+            <sequence key="ResponseMappingSQ"/>
+            <respond/>
+        </outSequence>
+        <faultSequence/>
+    </resource>
+</api>

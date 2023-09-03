@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><artifacts>
+    <artifact name="RegisterationAPI" groupId="com.example.api" version="1.0.0" type="synapse/api" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/api/RegisterationAPI.xml</file>
+    </artifact>
+    <artifact name="is_swagger" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/is_swagger.yaml</file>
+    </artifact>
+    <artifact name="is_metadata" groupId="com.example.metadata" version="1.0.0" type="synapse/metadata" serverRole="EnterpriseServiceBus">
+        <file>src/main/resources/metadata/is_metadata.yaml</file>
+    </artifact>
+    <artifact name="signupRequestMappingSQ" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/signupRequestMappingSQ.xml</file>
+    </artifact>
+    <artifact name="signupPayloadMappingSQ" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/signupPayloadMappingSQ.xml</file>
+    </artifact>
+    <artifact name="selfSignupEP" groupId="com.example.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/selfSignupEP.xml</file>
+    </artifact>
+    <artifact name="SignupResponseSQ" groupId="com.example.sequence" version="1.0.0" type="synapse/sequence" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/sequences/SignupResponseSQ.xml</file>
+    </artifact>
+    <artifact name="RegAPI_EP" groupId="com.example.endpoint" version="1.0.0" type="synapse/endpoint" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/endpoints/RegAPI_EP.xml</file>
+    </artifact>
+</artifacts>

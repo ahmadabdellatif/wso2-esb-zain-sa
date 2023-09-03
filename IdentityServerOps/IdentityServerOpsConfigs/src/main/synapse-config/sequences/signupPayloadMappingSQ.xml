@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence name="signupPayloadMappingSQ" trace="disable" xmlns="http://ws.apache.org/ns/synapse">
+    <payloadFactory media-type="json">
+        <format>{&#xd;
+    "user": {&#xd;
+        "username": "$1",&#xd;
+        "realm": "PRIMARY",&#xd;
+        "password": "$2",&#xd;
+        "claims": [&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/givenname",&#xd;
+                "value": "$3"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/identity/emailVerified",&#xd;
+                "value": "false"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/lastname",&#xd;
+                "value": "$4"&#xd;
+            },&#xd;
+            {&#xd;
+                "uri": "http://wso2.org/claims/mobile",&#xd;
+                "value": "$5"&#xd;
+            }&#xd;
+        ]&#xd;
+    },&#xd;
+    "properties": []&#xd;
+}</format>
+        <args>
+            <arg evaluator="xml" expression="get-property('userName')"/>
+            <arg evaluator="xml" expression="get-property('password')"/>
+            <arg evaluator="xml" expression="get-property('givenName')"/>
+            <arg evaluator="xml" expression="get-property('lastName')"/>
+            <arg evaluator="xml" expression="get-property('mobile')"/>
+        </args>
+    </payloadFactory>
+    <header name="Content-Type" scope="transport" value="application/json"/>
+</sequence>
